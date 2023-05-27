@@ -1,5 +1,7 @@
+import ContactApp from "./components/ContactApp";
+
 function App() {
-  return <></>;
+  return <ContactApp />;
 }
 
 export default App;
