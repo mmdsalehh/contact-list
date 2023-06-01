@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { BiTrash, BiUserCircle } from "react-icons/bi";
 import { useContacts, useContactsDispatcher } from "../context/ContactProvider";
+import { Link } from "react-router-dom";
 
 const ContactList = () => {
   const contacts = useContacts();
@@ -36,10 +37,12 @@ const ContactList = () => {
         >
           <div className="flex items-center">
             <BiUserCircle className="text-4xl" />
-            <div className="ml-2">
-              <p className="selection:bg-white">{contact.name}</p>
-              <p className="selection:bg-white">{contact.email}</p>
-            </div>
+            <Link to={`/contact/${contact.id}`}>
+              <div className="ml-2">
+                <p className="selection:bg-white">{contact.name}</p>
+                <p className="selection:bg-white">{contact.email}</p>
+              </div>
+            </Link>
           </div>
           <div className="flex items-center">
             <BiTrash

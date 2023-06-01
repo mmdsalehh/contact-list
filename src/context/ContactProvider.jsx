@@ -1,4 +1,4 @@
-import { createContext, useReducer, useContext } from "react";
+import { createContext, useReducer, useContext, useEffect } from "react";
 import PropTypes from "prop-types";
 
 const ContactContext = createContext();
@@ -18,6 +18,14 @@ const reducer = (state, action) => {
     }
 
     case "remove": {
+      localStorage.setItem(
+        "contacts",
+        JSON.stringify(
+          JSON.parse(localStorage.getItem("contacts")).filter(
+            (contact) => contact.id !== action.id
+          )
+        )
+      );
       return state.filter((contact) => contact.id !== action.id);
     }
 
@@ -28,6 +36,11 @@ const reducer = (state, action) => {
 
 const ContactProvider = ({ children }) => {
   const [contacts, dispatch] = useReducer(reducer, []);
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("contacts"));
+    if (data && data.length) dispatch({ type: "addMany", data });
+  }, []);
 
   return (
     <ContactContext.Provider value={contacts}>
