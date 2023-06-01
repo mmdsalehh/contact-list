@@ -1,32 +1,25 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 import Header from "./Header";
 import ContactAdd from "./ContactAdd";
 import ContactList from "./ContactList";
-
-const generateId = () => Math.ceil(Math.random() * 10000);
+import { useContacts, useContactsDispatcher } from "../context/ContactContext";
 
 const ContactApp = () => {
-  const [contacts, setContacts] = useState([]);
+  const contacts = useContacts();
+  const dispatch = useContactsDispatcher();
 
   const handleContactAdd = (contact) => {
-    setContacts((prevState) => [
-      ...prevState,
-      { ...contact, id: generateId() },
-    ]);
+    dispatch({ type: "addOne", data: contact });
   };
 
   const handleContactDelete = (id) => {
-    const new_contacts = contacts.filter((contact) => contact.id !== id);
-    setContacts(new_contacts);
+    dispatch({ type: "remove", id });
   };
 
   useEffect(() => {
     const data = JSON.parse(localStorage.getItem("contacts"));
-    if (data && data.length) {
-      console.log("here", data);
-      setContacts(data);
-    }
+    if (data && data.length) dispatch({ type: "addMany", data });
   }, []);
 
   useEffect(() => {
