@@ -1,7 +1,31 @@
+import { useEffect } from "react";
 import { BiTrash, BiUserCircle } from "react-icons/bi";
+import { useContacts, useContactsDispatcher } from "../context/ContactProvider";
 
-const ContactList = ({ contacts, handleContactDelete }) => {
-  if (!contacts.length) return null;
+const ContactList = () => {
+  const contacts = useContacts();
+  const dispatch = useContactsDispatcher();
+
+  const handleContactDelete = (id) => {
+    dispatch({ type: "remove", id });
+  };
+
+  useEffect(() => {
+    const data = JSON.parse(localStorage.getItem("contacts"));
+    if (data && data.length) dispatch({ type: "addMany", data });
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("contacts", JSON.stringify(contacts));
+  }, [contacts]);
+
+  if (!contacts.length) {
+    return (
+      <div className="p-4 text-center">
+        <h1 className="text-3xl font-semibold">No Contact</h1>
+      </div>
+    );
+  }
 
   return (
     <div className="mt-4 space-y-2">

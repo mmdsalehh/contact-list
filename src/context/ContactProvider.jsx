@@ -7,7 +7,7 @@ const ContactContextDispatcher = createContext();
 const reducer = (state, action) => {
   switch (action.type) {
     case "addMany": {
-      return [...action.data, ...state];
+      return [...action.data];
     }
 
     case "addOne": {

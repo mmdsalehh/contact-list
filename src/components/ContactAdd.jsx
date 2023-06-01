@@ -1,7 +1,12 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useContactsDispatcher } from "../context/ContactProvider";
 import Input from "../common/Input";
 
-const ContactAdd = ({ handleContactAdd }) => {
+const ContactAdd = () => {
+  const dispatch = useContactsDispatcher();
+  const navigate = useNavigate();
+
   const [formValues, setFormValues] = useState({
     name: "",
     email: "",
@@ -14,7 +19,8 @@ const ContactAdd = ({ handleContactAdd }) => {
       return;
     }
 
-    handleContactAdd(formValues);
+    dispatch({ type: "addOne", data: formValues });
+    navigate("/");
     setFormValues({
       name: "",
       email: "",

@@ -1,12 +1,8 @@
-import ContactApp from "./components/ContactApp";
-import ContactProvider from "./context/ContactContext";
+import { RouterProvider } from "react-router-dom";
+import router from "./router";
 
 function App() {
-  return (
-    <ContactProvider>
-      <ContactApp />
-    </ContactProvider>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
