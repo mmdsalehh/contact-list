@@ -1,8 +1,10 @@
-import { createBrowserRouter } from "react-router-dom";
+import { createBrowserRouter, redirect } from "react-router-dom";
 import RootLayout from "./layout/RootLayout";
 import ContactList from "./components/ContactList";
 import ContactAdd from "./components/ContactAdd";
 import SingleContact from "./components/SingleContact";
+import ContactService from "./services/contactService";
+import { isAxiosError } from "axios";
 
 const router = createBrowserRouter([
   {
@@ -11,9 +13,22 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <ContactList />,
+        loader: async () => (await ContactService.getContacts()).data,
       },
       { path: "/add", element: <ContactAdd /> },
-      { path: "/contact/:id", element: <SingleContact /> },
+      {
+        path: "/contact/:id",
+        element: <SingleContact />,
+        loader: async ({ params }) => {
+          try {
+            const response = await ContactService.getContact(params.id);
+            return response.data;
+          } catch (err) {
+            if (!isAxiosError(err)) return redirect("/404");
+            if (err.response.status === 404) return redirect("/404");
+          }
+        },
+      },
       {
         path: "/404",
         element: (

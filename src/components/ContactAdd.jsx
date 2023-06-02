@@ -1,10 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContactsDispatcher } from "../context/ContactProvider";
 import Input from "../common/Input";
+import ContactService from "../services/contactService";
 
 const ContactAdd = () => {
-  const dispatch = useContactsDispatcher();
   const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
@@ -12,14 +11,15 @@ const ContactAdd = () => {
     email: "",
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formValues.name || !formValues.email) {
       alert("Complete the information");
       return;
     }
 
-    dispatch({ type: "addOne", data: formValues });
+    await ContactService.addContact(formValues);
+
     navigate("/");
     setFormValues({
       name: "",

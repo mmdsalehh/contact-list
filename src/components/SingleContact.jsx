@@ -1,25 +1,16 @@
-import { useNavigate, useParams } from "react-router-dom";
-import { useContacts, useContactsDispatcher } from "../context/ContactProvider";
+import { useLoaderData, useNavigate } from "react-router-dom";
 import { BiUserCircle, BiTrash } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import ContactService from "../services/contactService";
 
 const SingleContact = () => {
-  const params = useParams();
-  const id = parseInt(params.id);
-  const contact = useContacts().find((contact) => contact.id === id);
-
+  const contact = useLoaderData();
   const navigate = useNavigate();
-  const dispatch = useContactsDispatcher();
 
-  const handleContactDelete = () => {
-    dispatch({ type: "remove", id: contact.id });
+  const handleContactDelete = async () => {
+    await ContactService.deleteContact(contact.id);
     navigate("/");
   };
-
-  if (!contact) {
-    navigate("/404");
-    return;
-  }
 
   return (
     <div

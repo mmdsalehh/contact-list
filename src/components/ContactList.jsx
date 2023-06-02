@@ -1,24 +1,16 @@
-import { useEffect } from "react";
+import { useLoaderData } from "react-router-dom";
 import { BiTrash, BiUserCircle } from "react-icons/bi";
-import { useContacts, useContactsDispatcher } from "../context/ContactProvider";
 import { Link } from "react-router-dom";
+import ContactService from "../services/contactService";
+import { useState } from "react";
 
 const ContactList = () => {
-  const contacts = useContacts();
-  const dispatch = useContactsDispatcher();
+  const [contacts, setContacts] = useState(useLoaderData());
 
-  const handleContactDelete = (id) => {
-    dispatch({ type: "remove", id });
+  const handleContactDelete = async (id) => {
+    await ContactService.deleteContact(id);
+    setContacts((await ContactService.getContacts()).data);
   };
-
-  useEffect(() => {
-    const data = JSON.parse(localStorage.getItem("contacts"));
-    if (data && data.length) dispatch({ type: "addMany", data });
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem("contacts", JSON.stringify(contacts));
-  }, [contacts]);
 
   if (!contacts.length) {
     return (
