@@ -5,6 +5,7 @@ import ContactAdd from "./components/ContactAdd";
 import SingleContact from "./components/SingleContact";
 import ContactService from "./services/contactService";
 import { isAxiosError } from "axios";
+import ContactEdit from "./components/ContactEdit";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,19 @@ const router = createBrowserRouter([
       {
         path: "/contact/:id",
         element: <SingleContact />,
+        loader: async ({ params }) => {
+          try {
+            const response = await ContactService.getContact(params.id);
+            return response.data;
+          } catch (err) {
+            if (!isAxiosError(err)) return redirect("/404");
+            if (err.response.status === 404) return redirect("/404");
+          }
+        },
+      },
+      {
+        path: "/edit/:id",
+        element: <ContactEdit />,
         loader: async ({ params }) => {
           try {
             const response = await ContactService.getContact(params.id);

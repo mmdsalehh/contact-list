@@ -1,5 +1,5 @@
 import { useLoaderData } from "react-router-dom";
-import { BiTrash, BiUserCircle } from "react-icons/bi";
+import { BiTrash, BiUserCircle, BiEdit } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import ContactService from "../services/contactService";
 import { useState } from "react";
@@ -36,7 +36,10 @@ const ContactList = () => {
               </div>
             </Link>
           </div>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-3">
+            <Link to={`/edit/${contact.id}`}>
+              <BiEdit className="text-xl text-orange-500 hover:cursor-pointer hover:text-orange-600 active:scale-90" />
+            </Link>
             <BiTrash
               className="text-xl text-red-500 hover:cursor-pointer active:scale-90"
               onClick={() => handleContactDelete(contact.id)}
